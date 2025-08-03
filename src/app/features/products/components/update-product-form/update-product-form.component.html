@@ -1,0 +1,126 @@
+<form (ngSubmit)="onSubmit()" class="space-y-6">
+  
+  <!-- Loading State -->
+  <div *ngIf="isInitializing" class="flex items-center justify-center py-8">
+    <div class="flex items-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+      <span class="ml-3 text-gray-600">Cargando detalles del producto...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isInitializing" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+          <span class="text-white text-xs font-bold">!</span>
+        </div>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-800">{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <div *ngIf="!isInitializing">
+    <!-- Title -->
+    <div>
+      <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+        Título *
+      </label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        [(ngModel)]="product.title"
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+        placeholder="Ingresa el título del producto">
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+        Descripción *
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="product.description"
+        required
+        rows="4"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 resize-none"
+        placeholder="Ingresa la descripción del producto"></textarea>
+    </div>
+
+    <!-- Image URL -->
+    <div>
+      <label for="imageUrl" class="block text-sm font-semibold text-gray-700 mb-2">
+        URL de la imagen
+      </label>
+      <input
+        type="url"
+        id="imageUrl"
+        name="imageUrl"
+        [(ngModel)]="product.imageUrl"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+        placeholder="https://ejemplo.com/imagen.jpg">
+    </div>
+
+    <!-- Price -->
+    <div>
+      <label for="price" class="block text-sm font-semibold text-gray-700 mb-2">
+        Precio *
+      </label>
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <span class="text-gray-500 text-lg font-medium">$</span>
+        </div>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          [(ngModel)]="product.price"
+          required
+          min="0"
+          step="0.01"
+          class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          placeholder="0.00">
+      </div>
+    </div>
+
+    <!-- Available -->
+    <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <input
+        type="checkbox"
+        id="available"
+        name="available"
+        [(ngModel)]="product.available"
+        class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition-colors duration-200">
+      <label for="available" class="ml-3 block text-sm font-medium text-gray-700">
+        Producto disponible
+      </label>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 shadow-sm">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="isLoading"
+        class="px-6 py-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-sm">
+        <span *ngIf="!isLoading">Actualizar Producto</span>
+        <span *ngIf="isLoading" class="flex items-center">
+          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+          Actualizando...
+        </span>
+      </button>
+    </div>
+  </div>
+</form> 

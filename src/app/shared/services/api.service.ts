@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SessionStorageUtil } from '../utils/session-storage.util';
 import { AppConfig } from '../config/app.config';
 
 @Injectable({
@@ -13,16 +12,9 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = SessionStorageUtil.getToken();
-    let headers = new HttpHeaders({
+    return new HttpHeaders({
       'Content-Type': 'application/json'
     });
-
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
-
-    return headers;
   }
 
   get<T>(endpoint: string): Observable<T> {

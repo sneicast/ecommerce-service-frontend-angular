@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { LoginRequest } from '../../interfaces/auth.interface';
 
@@ -20,7 +21,10 @@ export class LoginPage {
   isLoading: boolean = false;
   errorMessage: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   validateForm(): void {
     // Validar que el email tenga formato válido y la contraseña tenga al menos 6 caracteres
@@ -49,11 +53,8 @@ export class LoginPage {
         console.log('Login exitoso:', response);
         this.isLoading = false;
         
-        // Aquí podrías redirigir al usuario a la página principal
-        // this.router.navigate(['/dashboard']);
-        
-        // Por ahora solo mostramos un mensaje de éxito
-        alert('¡Login exitoso! Token guardado en sessionStorage');
+        // Redirigir al usuario a la página de productos del admin
+        this.router.navigate(['/admin/products']);
       },
       error: (error) => {
         console.error('Error en login:', error);
