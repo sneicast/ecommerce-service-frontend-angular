@@ -1,0 +1,105 @@
+<form (ngSubmit)="onSubmit()" class="space-y-6">
+  
+  <!-- Loading State -->
+  <div *ngIf="isInitializing" class="flex items-center justify-center py-8">
+    <div class="flex items-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+      <span class="ml-3 text-gray-600">Cargando detalles del usuario...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isInitializing" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+          <span class="text-white text-xs font-bold">!</span>
+        </div>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-800">{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <div *ngIf="!isInitializing">
+    <!-- First Name -->
+    <div>
+      <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">
+        Nombre *
+      </label>
+      <input
+        type="text"
+        id="firstName"
+        name="firstName"
+        [(ngModel)]="user.firstName"
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+        placeholder="Ingresa el nombre del usuario">
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">
+        Apellido *
+      </label>
+      <input
+        type="text"
+        id="lastName"
+        name="lastName"
+        [(ngModel)]="user.lastName"
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+        placeholder="Ingresa el apellido del usuario">
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+        Email *
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="user.email"
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+        placeholder="usuario@ejemplo.com">
+    </div>
+
+    <!-- Status -->
+    <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <input
+        type="checkbox"
+        id="status"
+        name="status"
+        [(ngModel)]="user.status"
+        class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition-colors duration-200">
+      <label for="status" class="ml-3 block text-sm font-medium text-gray-700">
+        Usuario activo
+      </label>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 shadow-sm">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="isLoading"
+        class="px-6 py-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-sm">
+        <span *ngIf="!isLoading">Actualizar Usuario</span>
+        <span *ngIf="isLoading" class="flex items-center">
+          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+          Actualizando...
+        </span>
+      </button>
+    </div>
+  </div>
+</form> 

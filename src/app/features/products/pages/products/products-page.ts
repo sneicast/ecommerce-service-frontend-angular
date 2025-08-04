@@ -73,18 +73,15 @@ export class ProductsPage implements OnInit {
   }
 
   onProductCreated(product: Product): void {
-    // Agregar el nuevo producto a la lista
-    this.products.unshift(product);
+    // Cerrar modal y recargar lista desde API
     this.closeCreateModal();
+    this.loadProducts();
   }
 
   onProductUpdated(updatedProduct: Product): void {
-    // Actualizar el producto en la lista
-    const index = this.products.findIndex(p => p.id === updatedProduct.id);
-    if (index !== -1) {
-      this.products[index] = updatedProduct;
-    }
+    // Cerrar modal y recargar lista desde API
     this.closeUpdateModal();
+    this.loadProducts();
   }
 
   deleteProduct(productId: number): void {
@@ -94,8 +91,8 @@ export class ProductsPage implements OnInit {
       this.productsService.deleteProduct(productId).subscribe({
         next: () => {
           console.log('Producto eliminado exitosamente');
-          // Remover el producto de la lista
-          this.products = this.products.filter(product => product.id !== productId);
+          // Recargar lista desde API después de eliminar
+          this.loadProducts();
           this.deletingProductId = null;
         },
         error: (error) => {

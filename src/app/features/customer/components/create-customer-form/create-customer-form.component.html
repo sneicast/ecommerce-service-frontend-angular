@@ -1,0 +1,101 @@
+<form (ngSubmit)="onSubmit()" class="space-y-6">
+  
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+          <span class="text-white text-xs font-bold">!</span>
+        </div>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-800">{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- First Name -->
+  <div>
+    <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">
+      Nombre *
+    </label>
+    <input
+      type="text"
+      id="firstName"
+      name="firstName"
+      [(ngModel)]="customer.firstName"
+      required
+      [class.border-red-300]="errorMessage && (!customer.firstName || !customer.firstName.trim())"
+      [class.focus:border-red-500]="errorMessage && (!customer.firstName || !customer.firstName.trim())"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+      placeholder="Ingresa el nombre del cliente">
+  </div>
+
+  <!-- Last Name -->
+  <div>
+    <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">
+      Apellido *
+    </label>
+    <input
+      type="text"
+      id="lastName"
+      name="lastName"
+      [(ngModel)]="customer.lastName"
+      required
+      [class.border-red-300]="errorMessage && (!customer.lastName || !customer.lastName.trim())"
+      [class.focus:border-red-500]="errorMessage && (!customer.lastName || !customer.lastName.trim())"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+      placeholder="Ingresa el apellido del cliente">
+  </div>
+
+  <!-- Phone Number -->
+  <div>
+    <label for="phoneNumber" class="block text-sm font-semibold text-gray-700 mb-2">
+      Número de Teléfono *
+    </label>
+    <input
+      type="tel"
+      id="phoneNumber"
+      name="phoneNumber"
+      [(ngModel)]="customer.phoneNumber"
+      required
+      [class.border-red-300]="errorMessage && (!customer.phoneNumber || !customer.phoneNumber.trim())"
+      [class.focus:border-red-500]="errorMessage && (!customer.phoneNumber || !customer.phoneNumber.trim())"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+      placeholder="3000000000">
+  </div>
+
+  <!-- Address -->
+  <div>
+    <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">
+      Dirección
+    </label>
+    <textarea
+      id="address"
+      name="address"
+      [(ngModel)]="customer.address"
+      rows="3"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 resize-none"
+      placeholder="Ingresa la dirección del cliente (opcional)"></textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 shadow-sm">
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="isLoading"
+      class="px-6 py-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-sm">
+      <span *ngIf="!isLoading">Crear Cliente</span>
+      <span *ngIf="isLoading" class="flex items-center">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+        Creando...
+      </span>
+    </button>
+  </div>
+</form> 

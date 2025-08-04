@@ -22,6 +22,19 @@ export const routes: Routes = [
             {
                 path: 'products',
                 loadComponent: () => import('./features/products/pages/products/products-page').then(m => m.ProductsPage)
+            },
+            {
+                path: 'users',
+                loadComponent: () => import('./features/users/pages/users/users-page').then(m => m.UsersPage)
+            },
+            {
+                path: 'customers',
+                loadComponent: () => import('./features/customer/pages/customers/customers-page').then(m => m.CustomersPage)
+            },
+            {
+                path: '',
+                redirectTo: 'products',
+                pathMatch: 'full'
             }
         ]
     },
