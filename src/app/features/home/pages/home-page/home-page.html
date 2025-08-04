@@ -1,0 +1,143 @@
+<div class="min-h-screen bg-gray-100">
+  <div class="py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p class="mt-2 text-gray-600">Bienvenido al panel de administración</p>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Top Products Card -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-500 to-indigo-600">
+            <h2 class="text-xl font-semibold text-white">
+              Top 5 Productos Más Vendidos
+            </h2>
+          </div>
+          
+          <div class="p-6">
+            <!-- Loading State -->
+            <div *ngIf="isLoadingProducts" class="flex items-center justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></div>
+              <span class="text-gray-600">Cargando productos...</span>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="errorMessageProducts && !isLoadingProducts" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+                    <span class="text-white text-xs font-bold">!</span>
+                  </div>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-red-800">{{ errorMessageProducts }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Products List -->
+            <div *ngIf="!isLoadingProducts && !errorMessageProducts" class="space-y-3">
+              <div *ngFor="let product of topProducts; let i = index" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <!-- Ranking -->
+                <div class="flex-shrink-0 w-12">
+                  <span class="text-lg font-bold text-indigo-600">#{{ i + 1 }}</span>
+                </div>
+                
+                <!-- Product Name -->
+                <div class="flex-1 px-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ product.productName }}
+                  </div>
+                </div>
+                
+                <!-- Total Sales -->
+                <div class="flex-shrink-0 text-right">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ product.totalSales }}
+                  </div>
+                  <div class="text-xs text-gray-500">ventas</div>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div *ngIf="topProducts.length === 0" class="text-center py-8">
+                <div class="text-gray-500">
+                  <p class="text-lg font-medium">No hay datos de ventas</p>
+                  <p class="text-sm">Los productos más vendidos aparecerán aquí</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Customers Card -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-500 to-green-600">
+            <h2 class="text-xl font-semibold text-white">
+              Top 5 Clientes con Más Compras
+            </h2>
+          </div>
+          
+          <div class="p-6">
+            <!-- Loading State -->
+            <div *ngIf="isLoadingCustomers" class="flex items-center justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mr-3"></div>
+              <span class="text-gray-600">Cargando clientes...</span>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="errorMessageCustomers && !isLoadingCustomers" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+                    <span class="text-white text-xs font-bold">!</span>
+                  </div>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-red-800">{{ errorMessageCustomers }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customers List -->
+            <div *ngIf="!isLoadingCustomers && !errorMessageCustomers" class="space-y-3">
+              <div *ngFor="let customer of topCustomers; let i = index" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <!-- Ranking -->
+                <div class="flex-shrink-0 w-12">
+                  <span class="text-lg font-bold text-green-600">#{{ i + 1 }}</span>
+                </div>
+                
+                <!-- Customer Name -->
+                <div class="flex-1 px-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ customer.fullName }}
+                  </div>
+                </div>
+                
+                <!-- Total Purchases -->
+                <div class="flex-shrink-0 text-right">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ customer.totalPurchases }}
+                  </div>
+                  <div class="text-xs text-gray-500">compras</div>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div *ngIf="topCustomers.length === 0" class="text-center py-8">
+                <div class="text-gray-500">
+                  <p class="text-lg font-medium">No hay datos de compras</p>
+                  <p class="text-sm">Los clientes con más compras aparecerán aquí</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

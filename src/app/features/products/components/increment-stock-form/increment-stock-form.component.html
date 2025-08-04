@@ -1,0 +1,121 @@
+<form (ngSubmit)="onSubmit()" class="space-y-6">
+  
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+          <span class="text-white text-xs font-bold">!</span>
+        </div>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-800">{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Product Details -->
+  <div *ngIf="isLoadingProduct" class="bg-gray-50 rounded-lg p-4">
+    <div class="flex items-center justify-center">
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mr-3"></div>
+      <span class="text-gray-600">Cargando detalles del producto...</span>
+    </div>
+  </div>
+
+  <!-- Product Details -->
+  <div *ngIf="product && !isLoadingProduct" class="bg-gray-50 rounded-lg p-4">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Detalles del Producto</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <div class="flex items-center mb-3">
+          <div class="flex-shrink-0 h-12 w-12">
+            <img 
+              *ngIf="product.imageUrl" 
+              [src]="product.imageUrl" 
+              [alt]="product.title"
+              class="h-12 w-12 rounded-lg object-cover">
+            <div 
+              *ngIf="!product.imageUrl" 
+              class="h-12 w-12 rounded-lg bg-gray-300 flex items-center justify-center">
+              <span class="text-gray-500 text-xs">Sin imagen</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <div class="text-lg font-medium text-gray-900">
+              {{ product.title }}
+            </div>
+            <div class="text-sm text-gray-500">
+              {{ product.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-600">Precio:</span>
+          <span class="text-sm font-medium text-gray-900">{{ formatPrice(product.price) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-600">Stock actual:</span>
+          <span class="text-sm font-medium text-gray-900">{{ product.stockQuantity }} unidades</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-600">Estado:</span>
+          <span class="text-sm font-medium" [ngClass]="product.available ? 'text-green-600' : 'text-red-600'">
+            {{ product.available ? 'Disponible' : 'No disponible' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quantity Input -->
+  <div *ngIf="product && !isLoadingProduct">
+    <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-2">
+      Cantidad a Incrementar *
+    </label>
+    <input
+      type="number"
+      id="quantity"
+      name="quantity"
+      [(ngModel)]="quantity"
+      min="1"
+      max="1000"
+      required
+      [class.border-red-300]="errorMessage && quantity <= 0"
+      [class.focus:border-red-500]="errorMessage && quantity <= 0"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+      placeholder="Ingresa la cantidad a agregar">
+    
+    <!-- Preview -->
+    <div *ngIf="product && quantity > 0" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-blue-800">Stock después del incremento:</span>
+        <span class="text-lg font-bold text-blue-900">{{ getNewStockTotal() }} unidades</span>
+      </div>
+      <div class="mt-1 text-xs text-blue-600">
+        {{ product.stockQuantity }} + {{ quantity }} = {{ getNewStockTotal() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 shadow-sm">
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="isLoading || !product || quantity <= 0"
+      class="px-6 py-3 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-sm">
+      <span *ngIf="!isLoading">Incrementar Stock</span>
+      <span *ngIf="isLoading" class="flex items-center">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+        Incrementando...
+      </span>
+    </button>
+  </div>
+</form> 

@@ -4,8 +4,8 @@ export interface Product {
   description: string;
   imageUrl: string;
   price: number;
-  available: boolean;
   stockQuantity: number;
+  available: boolean;
 }
 
 export interface ProductsResponse {

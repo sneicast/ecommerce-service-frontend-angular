@@ -20,6 +20,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard], // Proteger toda la ruta admin
         children: [
             {
+                path: 'dashboard',
+                loadComponent: () => import('./features/home/pages/home-page/home-page').then(m => m.HomePage)
+            },
+            {
                 path: 'products',
                 loadComponent: () => import('./features/products/pages/products/products-page').then(m => m.ProductsPage)
             },
@@ -37,7 +41,7 @@ export const routes: Routes = [
             },
             {
                 path: '',
-                redirectTo: 'products',
+                redirectTo: 'dashboard',
                 pathMatch: 'full'
             }
         ]

@@ -4,11 +4,12 @@ import { ProductsService } from '../../services/products.service';
 import { Product } from '../../interfaces/product.interface';
 import { CreateProductFormComponent } from '../../components/create-product-form/create-product-form.component';
 import { UpdateProductFormComponent } from '../../components/update-product-form/update-product-form.component';
+import { IncrementStockFormComponent } from '../../components/increment-stock-form/increment-stock-form.component';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-products-page',
-  imports: [CommonModule, CreateProductFormComponent, UpdateProductFormComponent, ModalComponent],
+  imports: [CommonModule, CreateProductFormComponent, UpdateProductFormComponent, IncrementStockFormComponent, ModalComponent],
   templateUrl: './products-page.html',
   styleUrl: './products-page.scss'
 })
@@ -18,6 +19,7 @@ export class ProductsPage implements OnInit {
   errorMessage: string = '';
   showCreateModal: boolean = false;
   showUpdateModal: boolean = false;
+  showIncrementStockModal: boolean = false;
   selectedProductId: number = 0;
   deletingProductId: number | null = null;
 
@@ -53,23 +55,23 @@ export class ProductsPage implements OnInit {
   }
 
   openUpdateModal(productId: number): void {
-    // Limpiar estado anterior y establecer nuevo ID
-    this.selectedProductId = 0;
-    this.showUpdateModal = false;
-    
-    // Usar setTimeout para asegurar que el componente se reinicialice
-    setTimeout(() => {
-      this.selectedProductId = productId;
-      this.showUpdateModal = true;
-    }, 0);
+    this.selectedProductId = productId;
+    this.showUpdateModal = true;
   }
 
   closeUpdateModal(): void {
     this.showUpdateModal = false;
-    // Limpiar el ID después de cerrar el modal
-    setTimeout(() => {
-      this.selectedProductId = 0;
-    }, 100);
+    this.selectedProductId = 0;
+  }
+
+  openIncrementStockModal(productId: number): void {
+    this.selectedProductId = productId;
+    this.showIncrementStockModal = true;
+  }
+
+  closeIncrementStockModal(): void {
+    this.showIncrementStockModal = false;
+    this.selectedProductId = 0;
   }
 
   onProductCreated(product: Product): void {
@@ -84,20 +86,23 @@ export class ProductsPage implements OnInit {
     this.loadProducts();
   }
 
+  onStockIncremented(updatedProduct: Product): void {
+    // Cerrar modal y recargar lista desde API
+    this.closeIncrementStockModal();
+    this.loadProducts();
+  }
+
   deleteProduct(productId: number): void {
-    if (confirm('¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.')) {
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       this.deletingProductId = productId;
       
       this.productsService.deleteProduct(productId).subscribe({
         next: () => {
-          console.log('Producto eliminado exitosamente');
-          // Recargar lista desde API después de eliminar
-          this.loadProducts();
           this.deletingProductId = null;
+          this.loadProducts();
         },
         error: (error) => {
           console.error('Error al eliminar producto:', error);
-          this.errorMessage = 'Error al eliminar el producto.';
           this.deletingProductId = null;
         }
       });

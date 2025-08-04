@@ -7,6 +7,7 @@ import { ProductsService } from '../../../products/services/products.service';
 import { Order, CreateOrderRequest, CreateOrderItem } from '../../interfaces/order.interface';
 import { Customer } from '../../../customers/interfaces/customer.interface';
 import { Product } from '../../../products/interfaces/product.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-order-form',
@@ -94,10 +95,11 @@ export class CreateOrderFormComponent implements OnInit {
         this.isLoading = false;
         this.orderCreated.emit(createdOrder);
         this.resetForm();
+        this.loadProducts();
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error al crear orden:', error);
-        this.errorMessage = 'Error al crear la orden.';
+        this.errorMessage = this.extractErrorMessage(error);
         this.isLoading = false;
       }
     });
@@ -145,6 +147,21 @@ export class CreateOrderFormComponent implements OnInit {
     }
 
     return true;
+  }
+
+  private extractErrorMessage(error: HttpErrorResponse): string {
+    try {
+      // Intentar extraer el mensaje del error del backend
+      if (error.error && error.error.error && error.error.error.message) {
+        return error.error.error.message;
+      }
+      
+      // Si no tiene la estructura esperada, mostrar mensaje genérico
+      return 'Error al crear la orden.';
+    } catch (e) {
+      // Si hay algún error al procesar el mensaje, mostrar mensaje genérico
+      return 'Error al crear la orden.';
+    }
   }
 
   private resetForm(): void {

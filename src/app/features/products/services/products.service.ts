@@ -17,15 +17,19 @@ export class ProductsService {
     return this.apiService.get<Product>(`/api/v1/products/${id}`);
   }
 
-  createProduct(product: Omit<Product, 'id'>): Observable<Product> {
+  createProduct(product: any): Observable<Product> {
     return this.apiService.post<Product>('/api/v1/products', product);
   }
 
-  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
+  updateProduct(id: number, product: any): Observable<Product> {
     return this.apiService.put<Product>(`/api/v1/products/${id}`, product);
   }
 
   deleteProduct(id: number): Observable<void> {
     return this.apiService.delete<void>(`/api/v1/products/${id}`);
+  }
+
+  incrementStock(id: number, quantity: number): Observable<Product> {
+    return this.apiService.post<Product>(`/api/v1/products/${id}/increment-stock`, { quantity });
   }
 }

@@ -97,9 +97,6 @@
                         [disabled]="!user?.id"
                         class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
                         <span class="flex items-center">
-                          <div class="w-5 h-5 mr-1 flex items-center justify-center">
-                            <div class="w-4 h-4 border-2 border-current rounded-sm"></div>
-                          </div>
                           Editar
                         </span>
                       </button>
@@ -108,9 +105,6 @@
                         [disabled]="!user?.id || isDeleting(user?.id)"
                         class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
                         <span *ngIf="!isDeleting(user?.id)" class="flex items-center">
-                          <div class="w-5 h-5 mr-1 flex items-center justify-center">
-                            <div class="w-4 h-4 border-2 border-current rounded-sm"></div>
-                          </div>
                           Eliminar
                         </span>
                         <span *ngIf="isDeleting(user?.id)" class="flex items-center">
