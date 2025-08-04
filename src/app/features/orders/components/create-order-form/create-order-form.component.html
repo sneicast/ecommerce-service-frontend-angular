@@ -83,7 +83,7 @@
                   <div class="flex-shrink-0 h-10 w-10">
                     <div class="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
                       <span class="text-indigo-600 text-sm font-medium">
-                        {{ product.title?.charAt(0) || 'P' }}
+                        {{ product.title.charAt(0) || 'P' }}
                       </span>
                     </div>
                   </div>
@@ -132,8 +132,11 @@
         <span class="font-medium">{{ getSelectedItemsCount() }}</span>
       </div>
       <div class="flex justify-between text-sm">
-        <span class="text-gray-600">Total estimado:</span>
-        <span class="font-medium text-lg text-indigo-600">{{ formatPrice(getTotalAmount()) }}</span>
+        <span class="text-gray-600">Subtotal estimado:</span>
+        <span class="font-medium text-lg text-gray-900">{{ formatPrice(getTotalAmount()) }}</span>
+      </div>
+      <div class="text-xs text-gray-500 text-center">
+        * Los descuentos se aplicarán automáticamente según las promociones activas
       </div>
     </div>
   </div>

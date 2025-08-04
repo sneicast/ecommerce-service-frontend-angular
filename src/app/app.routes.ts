@@ -11,13 +11,13 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        canActivate: [PublicGuard], // Redirigir usuarios autenticados
+        canActivate: [PublicGuard], 
         loadComponent: () => import('./features/auth/pages/login/login-page').then(m => m.LoginPage)
     },
     {
         path: 'admin',
         component: AdminLayout,
-        canActivate: [AuthGuard], // Proteger toda la ruta admin
+        canActivate: [AuthGuard], 
         children: [
             {
                 path: 'dashboard',
@@ -38,6 +38,10 @@ export const routes: Routes = [
             {
                 path: 'orders',
                 loadComponent: () => import('./features/orders/page/orders-page/orders-page').then(m => m.OrdersPage)
+            },
+            {
+                path: 'promotions',
+                loadComponent: () => import('./features/promotions/pages/promotions/promotions-page').then(m => m.PromotionsPage)
             },
             {
                 path: '',

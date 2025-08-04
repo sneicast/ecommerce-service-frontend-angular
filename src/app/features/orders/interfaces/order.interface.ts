@@ -18,6 +18,10 @@ export interface Order {
   customerPhone: string;
   orderDate: string;
   totalAmount: number | null;
+  discountAmount: number;
+  finalAmount: number;
+  promotionId: string;
+  promotionName: string;
   createdBy: {
     id: string;
     firstName: string;

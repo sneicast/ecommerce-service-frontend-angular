@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductsService } from '../../services/products.service';
+import { FormsModule } from '@angular/forms';
+import { ProductsService, ProductFilters } from '../../services/products.service';
 import { Product } from '../../interfaces/product.interface';
 import { CreateProductFormComponent } from '../../components/create-product-form/create-product-form.component';
 import { UpdateProductFormComponent } from '../../components/update-product-form/update-product-form.component';
 import { IncrementStockFormComponent } from '../../components/increment-stock-form/increment-stock-form.component';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-products-page',
-  imports: [CommonModule, CreateProductFormComponent, UpdateProductFormComponent, IncrementStockFormComponent, ModalComponent],
+  imports: [CommonModule, FormsModule, CreateProductFormComponent, UpdateProductFormComponent, IncrementStockFormComponent, ModalComponent],
   templateUrl: './products-page.html',
   styleUrl: './products-page.scss'
 })
@@ -23,10 +25,23 @@ export class ProductsPage implements OnInit {
   selectedProductId: number = 0;
   deletingProductId: number | null = null;
 
-  constructor(private productsService: ProductsService) {}
+  // Filtros
+  titleFilter: string = '';
+  availableFilter: boolean | null = null;
+  private titleFilterSubject = new Subject<string>();
+
+  constructor(private productsService: ProductsService) {
+    // Configurar debounce para el filtro de título
+    this.titleFilterSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.loadProductsWithFilters();
+    });
+  }
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadProductsWithFilters();
   }
 
   loadProducts(): void {
@@ -44,6 +59,42 @@ export class ProductsPage implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  loadProductsWithFilters(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const filters: ProductFilters = {
+      title: this.titleFilter,
+      available: this.availableFilter
+    };
+
+    this.productsService.getProductsWithFilters(filters).subscribe({
+      next: (products) => {
+        this.products = products;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+        this.errorMessage = 'Error al cargar los productos.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onTitleFilterChange(): void {
+    this.titleFilterSubject.next(this.titleFilter);
+  }
+
+  onAvailableFilterChange(): void {
+    this.loadProductsWithFilters();
+  }
+
+  clearFilters(): void {
+    this.titleFilter = '';
+    this.availableFilter = null;
+    this.loadProductsWithFilters();
   }
 
   openCreateModal(): void {
@@ -77,19 +128,19 @@ export class ProductsPage implements OnInit {
   onProductCreated(product: Product): void {
     // Cerrar modal y recargar lista desde API
     this.closeCreateModal();
-    this.loadProducts();
+    this.loadProductsWithFilters();
   }
 
   onProductUpdated(updatedProduct: Product): void {
     // Cerrar modal y recargar lista desde API
     this.closeUpdateModal();
-    this.loadProducts();
+    this.loadProductsWithFilters();
   }
 
   onStockIncremented(updatedProduct: Product): void {
     // Cerrar modal y recargar lista desde API
     this.closeIncrementStockModal();
-    this.loadProducts();
+    this.loadProductsWithFilters();
   }
 
   deleteProduct(productId: number): void {
@@ -99,7 +150,7 @@ export class ProductsPage implements OnInit {
       this.productsService.deleteProduct(productId).subscribe({
         next: () => {
           this.deletingProductId = null;
-          this.loadProducts();
+          this.loadProductsWithFilters();
         },
         error: (error) => {
           console.error('Error al eliminar producto:', error);

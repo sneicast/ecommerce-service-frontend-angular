@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrdersService } from '../../services/orders.service';
 import { CustomersService } from '../../../customers/services/customers.service';
-import { ProductsService } from '../../../products/services/products.service';
+import { ProductsService, ProductFilters } from '../../../products/services/products.service';
 import { Order, CreateOrderRequest, CreateOrderItem } from '../../interfaces/order.interface';
 import { Customer } from '../../../customers/interfaces/customer.interface';
 import { Product } from '../../../products/interfaces/product.interface';
@@ -57,7 +57,7 @@ export class CreateOrderFormComponent implements OnInit {
 
   loadProducts(): void {
     this.isLoadingProducts = true;
-    this.productsService.getProducts().subscribe({
+    this.productsService.getProductsWithFilters({ available: true }).subscribe({
       next: (products) => {
         this.products = products;
         this.isLoadingProducts = false;

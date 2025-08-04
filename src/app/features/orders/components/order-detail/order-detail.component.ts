@@ -77,7 +77,13 @@ export class OrderDetailComponent implements OnInit, OnChanges {
   }
 
   calculateTotal(): number {
-    return this.order?.totalAmount || this.calculateSubtotal();
+    if (!this.order) return this.calculateSubtotal();
+    return this.order.finalAmount || this.calculateSubtotal();
+  }
+
+  calculateDiscountPercentage(): number {
+    if (!this.order || !this.order.totalAmount || this.order.totalAmount === 0) return 0;
+    return Math.round((this.order.discountAmount / this.order.totalAmount) * 100);
   }
 
   getCustomerInitials(): string {

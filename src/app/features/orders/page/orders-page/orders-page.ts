@@ -85,4 +85,9 @@ export class OrdersPage implements OnInit {
       currency: 'COP'
     }).format(price);
   }
+
+  calculateDiscountPercentage(order: any): number {
+    if (!order || !order.totalAmount || order.totalAmount === 0) return 0;
+    return Math.round((order.discountAmount / order.totalAmount) * 100);
+  }
 }

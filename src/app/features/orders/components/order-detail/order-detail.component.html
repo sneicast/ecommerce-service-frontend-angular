@@ -138,9 +138,25 @@
             <span class="text-gray-600">Subtotal:</span>
             <span class="font-medium">{{ formatPrice(calculateSubtotal()) }}</span>
           </div>
+          
+          <!-- Discount Information -->
+          <div *ngIf="order && order.discountAmount > 0" class="border-t border-gray-200 pt-3 space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600">Descuento:</span>
+              <span class="text-red-600 font-medium">-{{ formatPrice(order.discountAmount) }}</span>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+              <span>Porcentaje de descuento:</span>
+              <span>{{ calculateDiscountPercentage() }}%</span>
+            </div>
+            <div *ngIf="order.promotionName" class="text-xs text-indigo-600 text-center">
+              Promoción: {{ order.promotionName }}
+            </div>
+          </div>
+          
           <div class="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-200 pt-3">
-            <span>Total:</span>
-            <span class="text-indigo-600">{{ formatPrice(calculateTotal()) }}</span>
+            <span>Total Final:</span>
+            <span class="text-green-600">{{ formatPrice(order ? order.finalAmount : calculateSubtotal()) }}</span>
           </div>
         </div>
       </div>
