@@ -10,17 +10,24 @@ import { CommonModule } from '@angular/common';
 export class ModalComponent {
   @Input() isOpen: boolean = false;
   @Input() title: string = '';
-  @Input() size: 'sm' | 'md' | 'lg' | 'xl' = 'md';
+  @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
   @Output() closeModal = new EventEmitter<void>();
 
   get modalSizeClass(): string {
-    const sizeClasses = {
-      sm: 'max-w-sm',
-      md: 'max-w-md',
-      lg: 'max-w-lg',
-      xl: 'max-w-xl'
-    };
-    return sizeClasses[this.size];
+    switch (this.size) {
+      case 'sm':
+        return 'sm:max-w-sm';
+      case 'md':
+        return 'sm:max-w-md';
+      case 'lg':
+        return 'sm:max-w-lg';
+      case 'xl':
+        return 'sm:max-w-xl';
+      case 'full':
+        return 'sm:max-w-7xl';
+      default:
+        return 'sm:max-w-md';
+    }
   }
 
   onBackdropClick(event: Event): void {

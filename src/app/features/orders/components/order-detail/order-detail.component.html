@@ -1,0 +1,166 @@
+<div class="bg-white rounded-lg shadow-lg max-w-6xl mx-auto">
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="p-8 text-center">
+    <div class="flex items-center justify-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></div>
+      <span class="text-gray-600">Cargando detalle de la orden...</span>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="p-8">
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center">
+            <span class="text-white text-xs font-bold">!</span>
+          </div>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-800">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Detail -->
+  <div *ngIf="order && !isLoading" class="p-8">
+    
+    <!-- Header -->
+    <div class="border-b-2 border-gray-200 pb-6 mb-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Factura</h1>
+          <p class="text-gray-600">Orden #{{ order.id }}</p>
+          <p class="text-gray-600">{{ formatDate(order.orderDate) }}</p>
+        </div>
+        <div class="text-right">
+          <div class="w-16 h-16 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <span class="text-white text-2xl font-bold">F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer and Created By Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Customer Info -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+            <span class="text-blue-600 text-sm font-medium">{{ getCustomerInitials() }}</span>
+          </div>
+          Cliente
+        </h3>
+        <div class="space-y-2">
+          <p class="text-gray-900 font-medium">{{ order.customerName }}</p>
+          <p class="text-gray-600">{{ order.customerPhone }}</p>
+        </div>
+      </div>
+
+      <!-- Created By Info -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+          <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+            <span class="text-green-600 text-sm font-medium">{{ getCreatedByInitials() }}</span>
+          </div>
+          Creado Por
+        </h3>
+        <div class="space-y-2">
+          <p class="text-gray-900 font-medium">{{ order.createdByName }}</p>
+          <p class="text-gray-600">{{ order.createdBy.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Productos</h3>
+      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[800px] divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[300px]">
+                  Producto
+                </th>
+                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                  Cantidad
+                </th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                  Precio Unitario
+                </th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
+                  Subtotal
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let item of order.items" class="hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                      <div class="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                        <span class="text-indigo-600 text-sm font-medium">
+                          {{ item.productTitle?.charAt(0) || 'P' }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        {{ item.productTitle }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-4 text-sm text-gray-900 text-center">
+                  {{ item.quantity }}
+                </td>
+                <td class="px-4 py-4 text-sm text-gray-900 text-right">
+                  {{ formatPrice(item.unitPrice || 0) }}
+                </td>
+                <td class="px-4 py-4 text-sm font-medium text-gray-900 text-right">
+                  {{ formatPrice((item.unitPrice || 0) * item.quantity) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="bg-gray-50 rounded-lg p-6">
+      <div class="flex justify-end">
+        <div class="w-64 space-y-3">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Subtotal:</span>
+            <span class="font-medium">{{ formatPrice(calculateSubtotal()) }}</span>
+          </div>
+          <div class="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-200 pt-3">
+            <span>Total:</span>
+            <span class="text-indigo-600">{{ formatPrice(calculateTotal()) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 pt-6 border-t border-gray-200">
+      <div class="text-center text-gray-500 text-sm">
+        <p>Gracias por su compra</p>
+        <p class="mt-1">Esta es una factura generada automáticamente</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Close Button -->
+  <div class="px-8 pb-8">
+    <button
+      (click)="onClose()"
+      class="w-full px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 shadow-sm">
+      Cerrar
+    </button>
+  </div>
+</div> 

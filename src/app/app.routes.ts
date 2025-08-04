@@ -29,7 +29,11 @@ export const routes: Routes = [
             },
             {
                 path: 'customers',
-                loadComponent: () => import('./features/customer/pages/customers/customers-page').then(m => m.CustomersPage)
+                loadComponent: () => import('./features/customers/pages/customers/customers-page').then(m => m.CustomersPage)
+            },
+            {
+                path: 'orders',
+                loadComponent: () => import('./features/orders/page/orders-page/orders-page').then(m => m.OrdersPage)
             },
             {
                 path: '',
